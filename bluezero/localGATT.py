@@ -364,8 +364,10 @@ class Characteristic(dbus.service.Object):
         :return: value
         """
         if self.write_callback:
-            self.write_callback(dbus_tools.dbus_to_python(value),
+            transformed = self.write_callback(dbus_tools.dbus_to_python(value),
                                 dbus_tools.dbus_to_python(options))
+            if transformed:
+                value = transformed
         self.Set(constants.GATT_CHRC_IFACE, 'Value', value)
 
     @dbus.service.method(constants.GATT_CHRC_IFACE,
